@@ -1,25 +1,26 @@
-import { Head } from "$fresh/runtime.ts";
-import Counter from "../islands/Counter.tsx";
+import { App } from "@/components/App.tsx";
+import { type AccountState } from "@/routes/_middleware.ts";
+import { type PageProps } from "$fresh/server.ts";
+import { type Handlers } from "$fresh/server.ts";
 
-export default function Home() {
+export const handler: Handlers<AccountState, AccountState> = {
+  async GET(_request, ctx) {
+    await ctx.state.fetchTodoLists();
+    return ctx.render(ctx.state);
+  },
+};
+
+export default function Home(props: PageProps<AccountState>) {
   return (
-    <>
-      <Head>
-        <title>Fresh App</title>
-      </Head>
+    <App>
       <div>
-        <img
-          src="/logo.svg"
-          width="128"
-          height="128"
-          alt="the fresh logo: a sliced lemon dripping with juice"
-        />
         <p>
-          Welcome to `fresh`. Try updating this message in the ./routes/index.tsx
-          file, and refresh.
+          welcome to things!
         </p>
-        <Counter start={3} />
+        <p>
+          logged in as: {props.data.session?.user.user_metadata.name}
+        </p>
       </div>
-    </>
+    </App>
   );
 }
