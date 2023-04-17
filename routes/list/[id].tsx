@@ -20,6 +20,19 @@ export default function List(props: PageProps<AccountState>) {
         <p>
           logged in as: {props.data.session?.user.user_metadata.name}
         </p>
+        <form action={`/api/list/${props.params.id}`} method="POST">
+          <input type="text" name="name" placeholder="Item Name" required />
+          <button type="submit">Add Item</button>
+        </form>
+        <ul>
+          {props.data.todoListEntries!.map((entry) => (
+            <li>
+              {entry.name} -{" "}
+              {entry.completed_at ? "completed" : "not completed"}
+              ({entry.created_at})
+            </li>
+          ))}
+        </ul>
       </div>
     </App>
   );
